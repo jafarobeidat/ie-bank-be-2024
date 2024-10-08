@@ -4,7 +4,7 @@ from iebank_api.models import Account
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return 'Welcome to the IE Bank Corp. API!'
 
 @app.route('/skull', methods=['GET'])
 def skull():
@@ -24,12 +24,31 @@ def skull():
 
 @app.route('/accounts', methods=['POST'])
 def create_account():
-    name = request.json['name']
-    currency = request.json['currency']
-    account = Account(name, currency)
-    db.session.add(account)
-    db.session.commit()
-    return format_account(account)
+    try:
+        # Check if the request body is JSON
+        if not request.is_json:
+            return {'error': 'Request must be JSON'}, 400
+
+        # Get data from the request
+        data = request.json
+        name = data.get('name')
+        currency = data.get('currency')
+        country = data.get('country', "Jordan")  # Default to "Jordan" if country not provided
+
+        # Validate required fields
+        if not name or not currency:
+            return {'error': 'Missing required fields: name and currency'}, 400
+
+        # Create a new Account
+        account = Account(name=name, currency=currency, country=country)
+        db.session.add(account)
+        db.session.commit()
+        
+        return format_account(account), 201  # Return the created account with a 201 status code
+
+    except Exception as e:
+        print(f"Error creating account: {e}")  # Print the error to the console
+        return {'error': 'Internal server error'}, 500
 
 @app.route('/accounts', methods=['GET'])
 def get_accounts():
@@ -63,5 +82,6 @@ def format_account(account):
         'balance': account.balance,
         'currency': account.currency,
         'status': account.status,
+        'country': account.country, # Return country field in the response
         'created_at': account.created_at
     }

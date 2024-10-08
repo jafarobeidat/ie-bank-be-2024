@@ -9,14 +9,16 @@ class Account(db.Model):
     balance = db.Column(db.Float, nullable=False, default = 0.0)
     currency = db.Column(db.String(1), nullable=False, default="€")
     status = db.Column(db.String(10), nullable=False, default="Active")
+    country = db.Column(db.String(64), nullable=False, default="Jordan") # Added country field with Jordan as default as it is my favourite country
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return '<Event %r>' % self.account_number
 
-    def __init__(self, name, currency):
+    def __init__(self, name, currency, country="Jordan"):
         self.name = name
         self.account_number = ''.join(random.choices(string.digits, k=20))
         self.currency = currency
         self.balance = 0.0
         self.status = "Active"
+        self.country = country  # set country during account creation
