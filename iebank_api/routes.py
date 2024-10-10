@@ -55,10 +55,19 @@ def get_accounts():
     accounts = Account.query.all()
     return {'accounts': [format_account(account) for account in accounts]}
 
-@app.route('/accounts/<int:id>', methods=['GET'])
-def get_account(id):
-    account = Account.query.get(id)
+
+'''
+    Adjusted the get_account() route handler to properly handle the case where 
+    an account is not found and return a 404 error instead of calling 
+    format_account() on a None object.
+'''
+@app.route('/accounts/<int:account_id>', methods=['GET'])
+def get_account(account_id):
+    account = Account.query.get(account_id)
+    if account is None:
+        return {'error': 'Account not found'}, 404
     return format_account(account)
+
 
 @app.route('/accounts/<int:id>', methods=['PUT'])
 def update_account(id):
