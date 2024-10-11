@@ -12,7 +12,7 @@ permissions:
 
 env:
   BACKEND_WEBAPP_DEV: jafarobeidat-be-dev
-  BACKEND_WEBAPP_UAT: jafarobeidat-be-uat
+  
 
 jobs:
   build:
@@ -75,29 +75,4 @@ jobs:
         app-name: ${{ env.BACKEND_WEBAPP_DEV }}
         package: .
     
-  deploy-uat:
-    runs-on: ubuntu-latest
-    # if condition to trigger only on a pull request to main branch
-    if: github.event_name == 'pull_request' && github.event.action == 'opened'
-    needs: [build, deploy-dev]
-    environment:
-      name: 'Development'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v4
-      with:
-        name: python-app
-        path: .
-    
-    - uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v2
-      id: deploy-to-webapp
-      with:
-        app-name: ${{ env.BACKEND_WEBAPP_UAT }}
-        package: .
+  
