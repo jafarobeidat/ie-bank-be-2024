@@ -11,8 +11,8 @@ permissions:
   id-token: write
 
 env:
-  BACKEND_WEBAPP_DEV: jafarobeidat-be-dev
-  BACKEND_WEBAPP_UAT: jafarobeidat-be-uat
+  BACKEND_WEBAPP_DEV: jobeidat-be-dev
+  BACKEND_WEBAPP_UAT: jobeidat-be-uat
 
 jobs:
   build:
