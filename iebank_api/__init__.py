@@ -19,13 +19,14 @@ elif os.getenv('ENV') == 'ghci':
     print("Running in github mode")
     app.config.from_object('config.GithubCIConfig')
 
-
 db = SQLAlchemy(app)
 
 from iebank_api.models import Account
 
 with app.app_context():
     db.create_all()
-CORS(app, resources={r"/api/*": {"origins": "*"}}) # Allow CORS for all domains
+
+# CORS configuration
+CORS(app, resources={r"/*": {"origins": "*"}})  # Allow CORS for all routes and all API endpoints
 
 from iebank_api import routes
