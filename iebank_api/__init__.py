@@ -10,13 +10,10 @@ load_dotenv()
 
 # Select environment based on the ENV environment variable
 if os.getenv('ENV') == 'local':
-    print("Running in local mode")
     app.config.from_object('config.LocalConfig')
 elif os.getenv('ENV') == 'dev':
-    print("Running in development mode")
     app.config.from_object('config.DevelopmentConfig')
 elif os.getenv('ENV') == 'ghci':
-    print("Running in github mode")
     app.config.from_object('config.GithubCIConfig')
 
 db = SQLAlchemy(app)
@@ -26,7 +23,10 @@ from iebank_api.models import Account
 with app.app_context():
     db.create_all()
 
-# CORS configuration
-CORS(app, resources={r"/*": {"origins": "*"}})  # Allow CORS for all routes and all API endpoints
+# CORS configuration for multiple origins
+CORS(app, resources={r"/*": {"origins": [
+    "https://jafarobeidat-fe-uat.azurewebsites.net",
+    "https://jafarobeidat-fe-dev.azurewebsites.net"
+]}})
 
 from iebank_api import routes
