@@ -9,6 +9,10 @@ app = Flask(__name__)
 
 load_dotenv()
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local.db'
+
+db = SQLAlchemy(app)
+
 # Select environment based on the ENV environment variable
 if os.getenv('ENV') == 'local':
     app.config.from_object('config.LocalConfig')
@@ -26,9 +30,6 @@ with app.app_context():
     db.create_all()
 
 # CORS configuration for multiple origins
-CORS(app, resources={r"/*": {"origins": [
-    "https://jafarobeidat-fe-uat.azurewebsites.net",
-    "https://jafarobeidat-fe-dev.azurewebsites.net"
-]}})
+CORS(app)
 
 from iebank_api import routes
