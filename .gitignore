@@ -4,4 +4,6 @@ __pycache__/
 .vscode
 .db/
 instance/
-my_virtual_env/
+my_virtual_env
+.coverage
+
