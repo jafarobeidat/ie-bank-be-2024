@@ -7,6 +7,7 @@ import os
 
 app = Flask(__name__)
 
+# This is the line that made the UAT work
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local.db'
 
 load_dotenv()
